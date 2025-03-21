@@ -1,0 +1,391 @@
+# from fastapi import FastAPI, HTTPException
+# from pydantic import BaseModel
+# from typing import List
+
+# app = FastAPI()
+
+# # In-memory storage
+# items = [
+#     {"id": 1, "name": "Laptop", "price": 1000, "stock": 5},
+#     {"id": 2, "name": "Phone", "price": 500, "stock": 10}
+# ]
+
+# orders = []
+# offers = [{"id": 1, "description": "10% off on orders above $1000"}]
+
+# class Order(BaseModel):
+#     item_id: int
+#     quantity: int
+
+# # Browse Items
+# @app.get("/items")
+# def get_items():
+#     return items
+
+# # Place Order
+# @app.post("/orders")
+# def place_order(order: Order):
+#     for item in items:
+#         if item["id"] == order.item_id:
+#             if item["stock"] >= order.quantity:
+#                 item["stock"] -= order.quantity
+#                 orders.append({"item_id": order.item_id, "quantity": order.quantity})
+#                 return {"message": "Order placed successfully!"}
+#             else:
+#                 raise HTTPException(status_code=400, detail="Not enough stock")
+#     raise HTTPException(status_code=404, detail="Item not found")
+
+# # View Offers
+# @app.get("/offers")
+# def get_offers():
+#     return offers
+
+# if __name__ == "__main__":
+#     import uvicorn
+#     uvicorn.run(app, host="127.0.0.1", port=8000)
+
+
+
+
+# from fastapi import FastAPI, HTTPException
+# from pydantic import BaseModel
+# from typing import List, Dict
+
+# app = FastAPI()
+
+# # In-memory database
+# items = {
+#     1: {"name": "Laptop", "price": 1000, "stock": 5},
+#     2: {"name": "Phone", "price": 500, "stock": 10},
+# }
+# orders = []
+# offers = [{"item_id": 1, "discount": 10}]  # Example offer: 10% off on Laptop
+
+# # Models
+# class Item(BaseModel):
+#     name: str
+#     price: float
+#     stock: int
+
+# class Order(BaseModel):
+#     item_id: int
+#     quantity: int
+
+# class Offer(BaseModel):
+#     item_id: int
+#     discount: int
+
+
+# # Endpoints
+
+# @app.get("/items")
+# def get_items():
+#     return items
+
+# @app.post("/orders")
+# def place_order(order: Order):
+#     if order.item_id not in items:
+#         raise HTTPException(status_code=404, detail="Item not found")
+#     if items[order.item_id]["stock"] < order.quantity:
+#         raise HTTPException(status_code=400, detail="Not enough stock")
+    
+#     # Apply discount if available
+#     discount = next((o["discount"] for o in offers if o["item_id"] == order.item_id), 0)
+#     total_price = items[order.item_id]["price"] * order.quantity * ((100 - discount) / 100)
+
+#     # Update stock
+#     items[order.item_id]["stock"] -= order.quantity
+
+#     orders.append({"item_id": order.item_id, "quantity": order.quantity, "total_price": total_price})
+#     return {"message": "Order placed", "total_price": total_price}
+
+# @app.get("/offers")
+# def get_offers():
+#     return offers
+
+# @app.post("/items-management")
+# def add_item(item: Item):
+#     new_id = max(items.keys()) + 1 if items else 1
+#     items[new_id] = item.dict()
+#     return {"message": "Item added", "item_id": new_id}
+
+# @app.delete("/items-management/{item_id}")
+# def delete_item(item_id: int):
+#     if item_id not in items:
+#         raise HTTPException(status_code=404, detail="Item not found")
+#     del items[item_id]
+#     return {"message": "Item removed"}
+
+# @app.post("/offers-management")
+# def add_offer(offer: Offer):
+#     offers.append(offer.dict())
+#     return {"message": "Offer added"}
+
+# @app.delete("/offers-management/{item_id}")
+# def delete_offer(item_id: int):
+#     global offers
+#     offers = [o for o in offers if o["item_id"] != item_id]
+#     return {"message": "Offer removed"}
+
+# # Run server: `uvicorn main:app --reload`
+
+
+
+
+# from fastapi import FastAPI, HTTPException
+# from pydantic import BaseModel
+# from typing import Dict, List
+
+# from fastapi.middleware.cors import CORSMiddleware
+
+# app = FastAPI()
+
+# # CORS (Allow frontend requests)
+# app.add_middleware(
+#     CORSMiddleware,
+#     allow_origins=["*"],  # Change this to your frontend URL in production
+#     allow_credentials=True,
+#     allow_methods=["*"],
+#     allow_headers=["*"],
+# )
+
+# # In-memory storage
+# items: Dict[int, Dict] = {
+#     1: {"name": "Laptop", "price": 1000, "stock": 5},
+#     2: {"name": "Phone", "price": 500, "stock": 10},
+# }
+# orders: Dict[int, Dict] = {}
+# offers: Dict[int, int] = {1: 10}  # {item_id: discount}
+
+# # Models
+# class Item(BaseModel):
+#     name: str
+#     price: float
+#     stock: int
+
+# class Order(BaseModel):
+#     item_id: int
+#     quantity: int
+
+# class Offer(BaseModel):
+#     item_id: int
+#     discount: int
+
+# # Endpoints
+
+# @app.get("/items")
+# def get_items():
+#     """Returns all available items"""
+#     return items
+
+# @app.post("/orders")
+# def place_order(order: Order):
+#     """Places an order and applies discount if available"""
+#     if order.item_id not in items:
+#         raise HTTPException(status_code=404, detail="Item not found")
+#     if items[order.item_id]["stock"] < order.quantity:
+#         raise HTTPException(status_code=400, detail="Not enough stock")
+
+#     # Apply discount if available
+#     discount = offers.get(order.item_id, 0)
+#     total_price = items[order.item_id]["price"] * order.quantity * ((100 - discount) / 100)
+
+#     # Update stock
+#     items[order.item_id]["stock"] -= order.quantity
+
+#     # Generate order ID
+#     order_id = len(orders) + 1
+#     orders[order_id] = {"item_id": order.item_id, "quantity": order.quantity, "total_price": total_price}
+
+#     return {"message": "Order placed", "order_id": order_id, "total_price": total_price}
+
+# @app.get("/offers")
+# def get_offers():
+#     """Returns all available offers"""
+#     return offers
+
+# @app.post("/items-management")
+# def add_items(items_list: List[Item]):
+#     """Adds multiple items to inventory"""
+#     new_item_ids = []
+
+#     for item in items_list:
+#         # Check if item already exists (by name)
+#         for existing_item in items.values():
+#             if existing_item["name"].lower() == item.name.lower():
+#                 raise HTTPException(status_code=400, detail=f"Item '{item.name}' already exists")
+
+#         new_id = max(items.keys(), default=0) + 1
+#         items[new_id] = item.dict()
+#         new_item_ids.append(new_id)
+
+#     return {"message": "Items added", "item_ids": new_item_ids}
+
+# @app.delete("/items-management/{item_id}")
+# def delete_item(item_id: int):
+#     """Deletes an item from inventory"""
+#     if item_id not in items:
+#         raise HTTPException(status_code=404, detail="Item not found")
+
+#     # Remove associated offers
+#     offers.pop(item_id, None)
+
+#     del items[item_id]
+#     return {"message": "Item removed"}
+
+# @app.post("/offers-management")
+# def add_offer(offer: Offer):
+#     """Adds an offer for an item"""
+#     if offer.item_id not in items:
+#         raise HTTPException(status_code=404, detail="Item not found")
+#     if offer.item_id in offers:
+#         raise HTTPException(status_code=400, detail="Offer already exists for this item")
+
+#     offers[offer.item_id] = offer.discount
+#     return {"message": "Offer added"}
+
+# @app.delete("/offers-management/{item_id}")
+# def delete_offer(item_id: int):
+#     """Deletes an offer"""
+#     if item_id not in offers:
+#         raise HTTPException(status_code=404, detail="Offer not found")
+    
+#     del offers[item_id]
+#     return {"message": "Offer removed"}
+
+# # Run server with: `uvicorn main:app --reload`
+
+
+
+
+# from fastapi import FastAPI, HTTPException
+# from pydantic import BaseModel
+# from typing import Dict, List
+
+# from fastapi.middleware.cors import CORSMiddleware
+
+# app = FastAPI()
+
+# # CORS (Allow frontend requests)
+# app.add_middleware(
+#     CORSMiddleware,
+#     allow_origins=["*"],  # Change this to your frontend URL in production
+#     allow_credentials=True,
+#     allow_methods=["*"],
+#     allow_headers=["*"],
+# )
+
+# # In-memory storage
+# items: Dict[int, Dict] = {
+#     1: {"name": "Laptop", "price": 1000, "stock": 5},
+#     2: {"name": "Phone", "price": 500, "stock": 10},
+# }
+# orders: Dict[int, Dict] = {}
+# offers: Dict[int, int] = {1: 10}  # {item_id: discount}
+
+# # Models
+# class Item(BaseModel):
+#     name: str
+#     price: float
+#     stock: int
+#     offer: int = 0  # Default offer is 0 if not provided
+
+# class Order(BaseModel):
+#     item_id: int
+#     quantity: int
+
+# class Offer(BaseModel):
+#     item_id: int
+#     discount: int
+
+# # Endpoints
+
+# @app.get("/items")
+# def get_items():
+#     """Returns all available items with offers if available"""
+#     items_with_offers = []
+#     for item_id, item in items.items():
+#         offer = offers.get(item_id, 0)  # Get the discount offer, default to 0 if not available
+#         items_with_offers.append({**item, "id": item_id, "offer": offer})  # Add offer to each item
+#     return items_with_offers
+
+# @app.post("/orders")
+# def place_order(order: Order):
+#     """Places an order and applies discount if available"""
+#     if order.item_id not in items:
+#         raise HTTPException(status_code=404, detail="Item not found")
+#     if items[order.item_id]["stock"] < order.quantity:
+#         raise HTTPException(status_code=400, detail="Not enough stock")
+
+#     # Apply discount if available
+#     discount = offers.get(order.item_id, 0)
+#     total_price = items[order.item_id]["price"] * order.quantity * ((100 - discount) / 100)
+
+#     # Update stock
+#     items[order.item_id]["stock"] -= order.quantity
+
+#     # Generate order ID
+#     order_id = len(orders) + 1
+#     orders[order_id] = {"item_id": order.item_id, "quantity": order.quantity, "total_price": total_price}
+
+#     return {"message": "Order placed", "order_id": order_id, "total_price": total_price}
+
+# @app.get("/offers")
+# def get_offers():
+#     """Returns all available offers"""
+#     return offers
+
+# @app.post("/items-management")
+# def add_items(items_list: List[Item]):
+#     """Adds multiple items to inventory"""
+#     new_item_ids = []
+
+#     for item in items_list:
+#         # Check if item already exists (by name)
+#         for existing_item in items.values():
+#             if existing_item["name"].lower() == item.name.lower():
+#                 raise HTTPException(status_code=400, detail=f"Item '{item.name}' already exists")
+
+#         new_id = max(items.keys(), default=0) + 1
+#         items[new_id] = item.dict()
+#         # Apply the offer (if any) for this item
+#         if item.offer > 0:
+#             offers[new_id] = item.offer
+#         new_item_ids.append(new_id)
+
+#     return {"message": "Items added", "item_ids": new_item_ids}
+
+# @app.delete("/items-management/{item_id}")
+# def delete_item(item_id: int):
+#     """Deletes an item from inventory"""
+#     if item_id not in items:
+#         raise HTTPException(status_code=404, detail="Item not found")
+
+#     # Remove associated offers
+#     offers.pop(item_id, None)
+
+#     del items[item_id]
+#     return {"message": "Item removed"}
+
+# @app.post("/offers-management")
+# def add_offer(offer: Offer):
+#     """Adds an offer for an item"""
+#     if offer.item_id not in items:
+#         raise HTTPException(status_code=404, detail="Item not found")
+#     if offer.item_id in offers:
+#         raise HTTPException(status_code=400, detail="Offer already exists for this item")
+
+#     offers[offer.item_id] = offer.discount
+#     return {"message": "Offer added"}
+
+# @app.delete("/offers-management/{item_id}")
+# def delete_offer(item_id: int):
+#     """Deletes an offer"""
+#     if item_id not in offers:
+#         raise HTTPException(status_code=404, detail="Offer not found")
+    
+#     del offers[item_id]
+#     return {"message": "Offer removed"}
+
+# # Run server with: `uvicorn main:app --reload`
+

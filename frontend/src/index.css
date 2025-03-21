@@ -1,0 +1,166 @@
+/* Global styles for hover effects and item styling */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Arial', sans-serif;
+  background-color: #f7fafc;
+}
+
+.bg-gray-100 {
+  background-color: #f7fafc;
+}
+
+.bg-white {
+  background-color: #ffffff;
+}
+
+.text-gray-700 {
+  color: #4a5568;
+}
+
+.text-gray-600 {
+  color: #718096;
+}
+
+.text-green-500 {
+  color: #48bb78;
+}
+
+.font-bold {
+  font-weight: bold;
+}
+
+.p-10 {
+  padding: 2.5rem;
+}
+
+.mb-6 {
+  margin-bottom: 1.5rem;
+}
+
+.grid {
+  display: grid;
+}
+
+.grid-cols-1 {
+  grid-template-columns: repeat(1, 1fr);
+}
+
+.sm\:grid-cols-2 {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.lg\:grid-cols-3 {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.gap-6 {
+  gap: 1.5rem;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-xl {
+  font-size: 1.25rem;
+}
+
+.text-lg {
+  font-size: 1.125rem;
+}
+
+.border {
+  border: 1px solid #e2e8f0;
+}
+
+.shadow-md {
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.rounded-lg {
+  border-radius: 0.5rem;
+}
+
+.transition {
+  transition: all 0.3s ease;
+}
+
+.hover\:shadow-lg:hover {
+  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+}
+
+.hover\:scale-105:hover {
+  transform: scale(1.05);
+}
+
+.hover\:bg-blue-600:hover {
+  background-color: #2b6cb0;
+}
+
+.bg-blue-500 {
+  background-color: #4299e1;
+}
+
+.bg-green-500 {
+  background-color: #48bb78;
+}
+
+.text-white {
+  color: #ffffff;
+}
+
+.px-6 {
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+}
+
+.py-2 {
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+
+.mt-4 {
+  margin-top: 1rem;
+}
+
+.mt-10 {
+  margin-top: 2.5rem;
+}
+
+.w-64 {
+  width: 16rem;
+}
+
+.p-2 {
+  padding: 0.5rem;
+}
+
+.rounded-md {
+  border-radius: 0.375rem;
+}
+
+.shadow-sm {
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+/* Delete button color changes */
+.bg-red-500 {
+  background-color: #f56565;
+}
+
+.hover\:bg-red-600:hover {
+  background-color: #e53e3e;
+}
+
+.bg-green-500 {
+  background-color: #48bb78;
+}
+
+.hover\:bg-green-600:hover {
+  background-color: #38a169;
+}
