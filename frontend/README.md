@@ -26,10 +26,6 @@ A simple shopping app built with React and a FastAPI backend.
    git clone https://github.com/Aroojzahra908/shopping-APP
    cd shopping-APP
 
-## Install dependencies:
-
-npm install
-
 ## Start the app:
 npm run dev
 
