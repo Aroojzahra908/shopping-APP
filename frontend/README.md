@@ -1,13 +1,13 @@
-# Create React Project
+## Create React Project
 
-npx create-vite frontend --template react
-cd frontend
-npm install
+- npx create-vite frontend --template react
+- cd frontend
+- npm install
 
-# Install Dependencies
+## Install Dependencies
 
-npm install axios tailwindcss react-router-dom
-npx tailwindcss init -p
+- npm install axios tailwindcss react-router-dom
+- npx tailwindcss init -p
 
 # Shopping App 🛒
 
