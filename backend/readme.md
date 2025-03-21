@@ -23,24 +23,24 @@ pip install fastapi uvicorn pydantic
   ```
 # Features & API Endpoints
 
-1. Browse Items
+### Browse Items
 -  GET /items → Fetch all available items along with stock levels and prices.
 
-2. Order Items
+### Order Items
 
 - POST /orders
    - Users can add items to a cart and confirm an order.
    - Discounts are automatically applied if available.
 
-3. Apply Offers
+### Apply Offers
 - GET /offers → View all available discounts.
 
-4. Manage Inventory (For Staff)
+### Manage Inventory (For Staff)
 - POST /items-management → Add or update items.
 - DELETE /items-management/{item_id} → Remove an item.
 - PUT /items-management/{item_id} → Update item details.
 
-5. Manage Offers (For Staff)
+### Manage Offers (For Staff)
 - POST /offers-management → Add or update an offer.
 - DELETE /offers-management/{item_id} → Remove an offer.
 
@@ -52,6 +52,8 @@ pip install fastapi uvicorn pydantic
 
 - Open http://127.0.0.1:8000/docs to see Swagger API documentation.
 - Or use Postman to test endpoints manually.
+- 
+## View Offers
+![View Offers](backend/images/view%20offers.png)
 
-![View Offers](https://raw.githubusercontent.com/Aroojzahra908/shopping-APP/main/backend/images/view-offers.png)
 
