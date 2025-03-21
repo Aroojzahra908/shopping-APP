@@ -53,5 +53,5 @@ pip install fastapi uvicorn pydantic
 - Open http://127.0.0.1:8000/docs to see Swagger API documentation.
 - Or use Postman to test endpoints manually.
 
-![View Offers](images/view-offers.png)
+![View Offers](https://raw.githubusercontent.com/Aroojzahra908/shopping-APP/main/backend/images/view-offers.png)
 
